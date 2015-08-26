@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) Stefano Zacchiroli <zack@upsilon.cc>
+# Copyright (C) 2015 Stefano Zacchiroli <zack@upsilon.cc>
 # License: GNU General Public License (GPL), version 3 or above
 
 # Depends: libxml2-utils
