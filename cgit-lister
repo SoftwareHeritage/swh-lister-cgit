@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Copyright (C) Stefano Zacchiroli <zack@upsilon.cc>
+# License: GNU General Public License (GPL), version 3 or above
+
+# Depends: libxml2-utils
+
+REPO_URL_XPATH="//td[@class='sublevel-repo']/a/@href"
+
+if [ -z "$1" ] ; then
+    echo "Usage:   cgit-lister CGIT_BASE_URL"
+    echo "Example: cgit-lister http://git.savannah.gnu.org/cgit/"
+    echo "         cgit-lister http://anonscm.debian.org/cgit/"
+    echo "         cgit-lister http://cgit.freedesktop.org/"
+    exit 1
+fi
+CGIT_URL="$1"
+shift
+
+# extrace base_url, excluding URL path
+base_url=$(echo "$CGIT_URL" | sed 's|^\(https\?://[^/]*\)/.*|\1|')
+
+# we use the xmllint shell, as there is no way to use a separator other than
+# space for xpath results with "xmllint --xpath" :-( The output format of the
+# shell sucks as well, but at least is line based.
+echo "cat $REPO_URL_XPATH" | xmllint --html --shell "$CGIT_URL" \
+    | grep '^ href=' \
+    | sed -e 's/"$//' -e "s|^ href=\"|${base_url}|"
